@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  nginx:
+    build: ./srcs/nginx
+    container_name: nginx
+    image: nginx
+    ports:
+      - "443:443"
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/html
+      - nginx/ssl:/etc/nginx/ssl
+    restart: always
+
+
+  wordpress:
+    build: ./srcs/wordpress
+    container_name: wordpress
+    image: wordpress
+    depends_on:
+      - mariadb
+    networks:
+      - inception
+    volumes:
+      - wordpress:/var/www/html
+    restart: always
+
+  mariadb:
+    build: ./srcs/mariadb
+    container_name: mariadb
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wp_user
+      MYSQL_PASSWORD: wp_password
+    networks:
+      - inception
+    volumes:
+      - db:/var/lib/mysql
+    restart: always
+
+networks:
+  inception:
+    driver: bridge
+
+volumes:
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/
+      o: bind
+  wordpress:
+    name: wp
+    driver: local
+    driver_opts:
+      type: none
+      device: /home/${USER}/data/
+      o: bind
+
