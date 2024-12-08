@@ -1,13 +1,19 @@
-FROM debian:12.7
+FROM debian:bullseye
 
-# Install NGINX and OpenSSL using apt-get (Debian package manager)
-RUN apt-get update && apt-get install -y nginx openssl
+# Install NGINX and OpenSSL
+RUN apt-get update && apt-get install -y nginx openssl && apt-get clean
 
-# Copy custom NGINX config and SSL certificates into the container
+# Generate self-signed SSL certificate
+RUN mkdir -p /etc/nginx/ssl && \
+    openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+    -subj "/C=NL/ST=North Holland/L=Amsterdam/O=Codam/CN=jcaro.42.fr" \
+    -out /etc/nginx/ssl/server.crt \
+    -keyout /etc/nginx/ssl/server.key
+
+# Copy custom NGINX configuration into the container
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY ssl /etc/nginx/ssl
 
-# Expose port 443 for HTTPS
+# Expose port 443 for HTTPS traffic
 EXPOSE 443
 
 # Run NGINX in the foreground
