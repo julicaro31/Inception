@@ -1,0 +1,17 @@
+#!/bin/bash
+
+service mariadb start
+
+mariadb -v -u root << EOF
+CREATE DATABASE IF NOT EXISTS $DB_DATABASE;
+CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';
+GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO '$DB_USER'@'%' IDENTIFIED BY '$DB_PASSWORD';
+GRANT ALL PRIVILEGES ON $DB_DATABASE.* TO 'root'@'%' IDENTIFIED BY '$DB_ROOT_PASSWORD';
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('$DB_ROOT_PASSWORD');
+EOF
+
+sleep 3
+
+service mariadb stop
+
+exec $@ 

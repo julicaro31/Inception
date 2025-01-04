@@ -1,13 +1,17 @@
-build:
-	docker-compose -f docker/docker-compose.yml build
-
-up:
-	docker-compose -f docker/docker-compose.yml up -d
+up: 
+	@docker-compose -f ./srcs/docker-compose.yml up
 
 down:
-	docker-compose -f docker/docker-compose.yml down
+	@docker-compose -f ./srcs/docker-compose.yml down
+
+re:
+	@docker-compose -f ./srcs/docker-compose.yml up --build
 
 clean:
-	docker-compose -f docker/docker-compose.yml down -v --rmi all
-	rm -rf docker/volumes/wordpress/*
-	rm -rf docker/volumes/db/*
+	@docker stop $$(docker ps -qa);\
+	docker rm $$(docker ps -qa);\
+	docker rmi -f $$(docker images -qa);\
+	docker volume rm $$(docker volume ls -q);\
+	docker network rm $$(docker network ls -q);\
+
+.PHONY: up re down clean
