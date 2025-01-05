@@ -41,10 +41,10 @@ RUN wget --no-check-certificate https://raw.githubusercontent.com/wp-cli/builds/
     mv wp-cli.phar /usr/local/bin/wp
 
 # Set up web root directory
-RUN mkdir -p /var/www/inception/ && \
-    chown -R www-data:www-data /var/www/inception/
+RUN mkdir -p /var/www/html/ && \
+    chown -R www-data:www-data /var/www/html/
 
-WORKDIR /var/www/inception/
+WORKDIR /var/www/html/
 
 # Copy additional configuration and tools
 COPY ./conf/wp-config.php /tmp/

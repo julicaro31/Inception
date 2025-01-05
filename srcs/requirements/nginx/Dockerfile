@@ -1,24 +1,19 @@
-FROM debian:bullseye
+FROM	debian:bullseye
 
-EXPOSE	443
-
-RUN		apt update && apt install -y --no-install-recommends --no-install-suggests \
-		nginx \
-		openssl && \
-		rm -rf /var/lib/apt/lists/*
+RUN		apt-get update && apt-get install -y nginx openssl && apt-get clean
 
 ARG     DOMAIN_NAME
-
-RUN     mkdir -p /etc/nginx/certs && \
-	    openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
-        -out /etc/nginx/certs/jcaro.crt \
-        -keyout /etc/nginx/certs/jcaro.key \
-        -subj "/CN=${DOMAIN_NAME}"
+RUN 	mkdir -p /etc/nginx/ssl && \
+		openssl req -newkey rsa:4096 -x509 -sha256 -days 365 -nodes \
+		-subj "/C=NL/ST=North Holland/L=Amsterdam/O=Codam/CN=${DOMAIN_NAME}" \
+		-out /etc/nginx/ssl/jcaro.crt \
+		-keyout /etc/nginx/ssl/jcaro.key
 
 COPY	conf/nginx.conf     /etc/nginx/
-COPY	conf/server.conf	/etc/nginx/conf.d/
 
 RUN		mkdir -p /var/www/
 RUN		chown -R www-data:www-data /var/www/
+
+EXPOSE	443
 
 CMD		["nginx", "-g", "daemon off;"]
