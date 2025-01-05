@@ -11,7 +11,7 @@ services:
       - "443:443"
     restart: always
     volumes:
-      - wordpress:/var/www/html #change this to /home/jcaro/data:/var/www/html
+      - wordpress:/var/www/html
 
   wordpress:
     build: ./requirements/wordpress
@@ -27,7 +27,7 @@ services:
       - docker-network
     restart: always
     volumes:
-      - wordpress:/var/www/html #change this to /home/jcaro/data:/var/www/html
+      - wordpress:/var/www/html
 
   mariadb:
     build: ./requirements/mariadb
@@ -50,4 +50,12 @@ networks:
 
 volumes:
   wordpress:
+    driver_opts:
+      type: none
+      device: /Users/juliacaro/data/wordpress #change this to /home/jcaro/data/wordpress
+      o: bind
   mariadb:
+      driver_opts:
+        type: none
+        device: /Users/juliacaro/data/mariadb #change this to /home/jcaro/data/mariadb
+        o: bind

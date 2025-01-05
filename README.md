@@ -1,3 +1,0 @@
-- dockercompose.yml
-- - Why "443:443" ? Port 443 is the standard port for using HTTPS (Hypertext Transfer Protocol Secure). A requirement for TLS
-- - Volumes: Example: Maps the local directory ./volumes/wordpress on the host machine to the /var/www/html directory inside the NGINX container
