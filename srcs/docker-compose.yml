@@ -5,41 +5,43 @@ services:
     build: ./requirements/nginx
     container_name: nginx
     image: nginx
-    ports:
-      - "443:443"
     networks:
       - docker-network
+    ports:
+      - "443:443"
+    restart: always
     volumes:
       - wordpress:/var/www/html #change this to /home/jcaro/data:/var/www/html
-    restart: always
 
   wordpress:
     build: ./requirements/wordpress
     container_name: wordpress
-    image: wordpress
-    networks:
-      - docker-network
-    volumes:
-      - wordpress:/var/www/html #change this to /home/jcaro/data:/var/www/html
-    restart: always
     depends_on:
       - mariadb
     env_file:
       - .env
+    expose:
+      - "9000"
+    image: wordpress
+    networks:
+      - docker-network
+    restart: always
+    volumes:
+      - wordpress:/var/www/html #change this to /home/jcaro/data:/var/www/html
 
   mariadb:
     build: ./requirements/mariadb
     container_name: mariadb
+    expose:
+      - "3306"
+    env_file:
+      - .env
     image: mariadb
     networks:
       - docker-network
-    env_file:
-      - .env
+    restart: always
     volumes:
       - mariadb:/var/lib/mysql
-    expose:
-      - "3306"
-    restart: always
 
 networks:
   docker-network:
