@@ -26,4 +26,5 @@ RUN chmod +x /bin/init_wp.sh
 
 EXPOSE 9000
 
-CMD ["init_wp.sh", "php-fpm8.2", "--nodaemonize"]
+ENTRYPOINT ["/bin/init_wp.sh"]
+CMD ["php-fpm8.2", "--nodaemonize"]

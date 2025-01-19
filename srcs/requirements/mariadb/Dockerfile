@@ -11,4 +11,5 @@ RUN chmod +x ./init_mdb.sh
 
 EXPOSE 3306
 
-CMD ["init_mdb.sh", "mysqld_safe"]
+ENTRYPOINT ["./init_mdb.sh"]
+CMD ["mysqld_safe"]

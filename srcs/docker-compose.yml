@@ -52,10 +52,10 @@ volumes:
   wordpress:
     driver_opts:
       type: none
-      device: /Users/juliacaro/data/wordpress #change this to /home/jcaro/data/wordpress
+      device: /home/jcaro/data/wordpress
       o: bind
   mariadb:
       driver_opts:
         type: none
-        device: /Users/juliacaro/data/mariadb #change this to /home/jcaro/data/mariadb
+        device: /home/jcaro/data/mariadb
         o: bind
